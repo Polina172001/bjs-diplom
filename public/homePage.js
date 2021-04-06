@@ -22,7 +22,7 @@ ApiConnector.current(response => {
 // Получение текущих курсов валюты
 const ratesBoard = new RatesBoard();
 
-function GetCurrencyRate() {
+function getCurrencyRate() {
   ApiConnector.getStocks(response => {
     if(response.success) {
       ratesBoard.clearTable();
@@ -30,8 +30,8 @@ function GetCurrencyRate() {
     }
   })
 }
-
-setInterval(GetCurrencyRate(), 6000);
+getCurrencyRate();
+setInterval(getCurrencyRate, 6000);
 
 // Операции с деньгами
 
@@ -43,9 +43,7 @@ moneyManager.addMoneyCallback = function (data) {
     if (response.success) {
       ProfileWidget.showProfile(response.data);
       moneyManager.setMessage(response.success, "пополнение баланса выполнено");
-    } else {
-      moneyManager.setMessage(response.success, response.data);
-    }
+    } else moneyManager.setMessage(false, response.error);
   });
 
 }
@@ -56,9 +54,7 @@ moneyManager.conversionMoneyCallback = function (data) {
     if (response.success) {
       ProfileWidget.showProfile(response.data);
       moneyManager.setMessage(response.success, "конвертция выполнена успешно");
-    } else {
-      moneyManager.setMessage(response.success, response.data);
-    }
+    } else moneyManager.setMessage(false, response.error);
   })
   
 }
@@ -69,9 +65,7 @@ moneyManager.sendMoneyCallback = function(data) {
     if (response.success) {
       ProfileWidget.showProfile(response.data);
       moneyManager.setMessage(response.success, "перевод валюты выполнен успешно");
-    } else {
-      moneyManager.setMessage(response.success, response.data);
-    }
+    } else moneyManager.setMessage(false, response.error);
   })
 }
 
@@ -96,9 +90,8 @@ favoritesWidget.addUserCallback = function(data) {
       favoritesWidget.fillTable(response.data);
       moneyManager.updateUsersList(response.data);
       favoritesWidget.setMessage(response.success, "пользователь успешно добавлен в избранное");
-    } else {
-      favoritesWidget.setMessage(response.success, response.data);
-    }
+    } else favoritesWidget.setMessage(false, response.error);
+    
   })
 }
 
@@ -110,9 +103,7 @@ favoritesWidget.removeUserCallback = function(data) {
       favoritesWidget.fillTable(response.data);
       moneyManager.updateUsersList(response.data);
       favoritesWidget.setMessage(response.success, "пользователь успешно удален из избранного");
-    } else {
-      favoritesWidget.setMessage(response.success, response.data);
-    }
+    } else favoritesWidget.setMessage(false, response.error);
   })
 }
 
